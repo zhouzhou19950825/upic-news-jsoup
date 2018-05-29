@@ -1,19 +1,17 @@
 package com.upic;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,13 +26,15 @@ public class Test {
 		// String url = "http://www.xinhuanet.com/politics/2018-03/27/c_1122594312.htm";
 		// String url = "http://china.zjol.com.cn/gnxw/201804/t20180402_6934037.shtml";
 		// String url="http://china.zjol.com.cn/gnxw/index.shtml";//浙江网list
-		String url = "http://www.xinhuanet.com/politics/2018-04/03/c_1122629749.htm";
+		// String url = "http://www.xinhuanet.com/politics/2018-04/03/c_1122629749.htm";
+		String url = "http://www.360doc.com/content/17/0615/10/273706_663281641.shtml";
 		Document doc = Jsoup.connect(url).get();
+//		System.out.println(doc.text());
 		// newCl.downloadPage(url);// 下载网页
-		String title = newCl.getnewTitle(doc);// 获取新闻标题
-		String time = newCl.getTimeNew(doc);// 获取新闻发布时间
-		String text = newCl.getNewtextBynew(doc);// 获取新闻内容
-		String orgin = newCl.getSource(doc);
+//		String title = newCl.getnewTitle(doc);// 获取新闻标题
+		// String time = newCl.getTimeNew(doc);// 获取新闻发布时间
+		// String text = newCl.getNewtextBynew(doc);// 获取新闻内容
+		// String orgin = newCl.getSource(doc);
 		// String title = newCl.getnewTitle(doc);// 获取新闻标题
 		// String time = newCl.getTimeGMW(doc);// 获取新闻发布时间
 		// String text = newCl.getNewtextByGMW(doc);// 获取新闻内容
@@ -45,11 +45,13 @@ public class Test {
 		// String text = newCl.getNewtextByZJW(doc);// 获取新闻内容
 		// String orgin=newCl.getOrignZJW(doc);
 		// newCl.getData(doc);
-		 System.out.println("新闻Url:" + url);
-		 System.out.println("新闻标题:" + title);
-		 System.out.println("newsTime:" + time);
-		 System.out.println("新闻内容:" + text);
-		 System.out.println("新闻来源:" + orgin);
+		String text = newCl.gettest(doc);
+		newCl.WriteStringToFile(null, text);
+//		System.out.println("新闻Url:" + url);
+//		System.out.println("新闻标题:" + title);
+		// System.out.println("newsTime:" + time);
+//		System.out.println("新闻内容:" + text);
+		// System.out.println("新闻来源:" + orgin);
 		System.out.println("******************************************************************");
 
 		// newCl.getImgurl(doc);// 获取图片链接
@@ -354,6 +356,28 @@ public class Test {
 		System.out.println("newsTime:" + time);
 		System.out.println("新闻内容:" + text);
 		System.out.println("新闻来源:" + orgin);
+	}
 
+	public String gettest(Document doc) {
+		StringBuffer sb=new StringBuffer();
+		Element elementsByClass = doc.getElementById("artContent");
+//		Elements elementsByTag = elementsByClass.getElementsByTag("p");
+//		elementsByTag.stream().forEach(x->{
+//			sb.append(x.text()).append("\r\n");
+//		});
+//		String text = elementsByClass.text();
+//		return sb.toString();
+		return elementsByClass.html();
+	}
+
+	public void WriteStringToFile(String filePath,String text) {
+		File file = new File("C:\\Users\\dtz\\Desktop\\1.txt");
+		try (PrintStream ps = new PrintStream(new FileOutputStream(file));) {
+			ps.println(text);// 往文件里写入字符串
+//			ps.append("http://www.jb51.net");// 在已有的基础上添加字符串
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

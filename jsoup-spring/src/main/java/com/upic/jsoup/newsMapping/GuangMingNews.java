@@ -14,7 +14,7 @@ import com.upic.jsoup.po.News;
 
 /**
  * 光明网是需要爬取页面解析list 时政：http://politics.gmw.cn/node_9840.htm
- * 
+ * 教育：http://edu.gmw.cn/node_10810.htm
  * @author dtz
  *
  */
@@ -55,6 +55,7 @@ public class GuangMingNews extends AbstractJsoupNewsMapping {
 	 */
 	@Override
 	protected List<News> getListNews0(Document document) {
+		String url=document.baseUri()+"/";
 		Elements elementsByClass = document.getElementsByClass("channel-newsGroup");
 		List<News> listNews = new ArrayList<News>();
 		elementsByClass.forEach(x -> {
@@ -62,8 +63,10 @@ public class GuangMingNews extends AbstractJsoupNewsMapping {
 			select.forEach(el -> {
 				String select2 = el.attr("href");
 				try {
-					listNews.add(selectAllNews("http://politics.gmw.cn/" + select2));
+					String urls =select2.startsWith("http")?select2:url+select2;
+					listNews.add(selectAllNews(urls));
 				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			});
 		});
@@ -78,7 +81,7 @@ public class GuangMingNews extends AbstractJsoupNewsMapping {
 
 	public static void main(String[] args) throws IOException {
 		GuangMingNews g = new GuangMingNews();
-		List<News> listNews = g.getListNews("http://politics.gmw.cn/node_9840.htm");
+		List<News> listNews = g.getListNews("http://edu.gmw.cn/node_10810.htm");
 		listNews.forEach(System.out::println);
 	}
 }
